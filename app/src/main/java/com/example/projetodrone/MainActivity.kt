@@ -11,8 +11,12 @@ import kotlinx.coroutines.launch
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
-import com.mavlink.generatedMavlinkFunctions.common.msg_command_long
-import com.mavlink.generatedMavlinkFunctions.enums.MAV_CMD
+
+//MavLink imports
+import com.MAVLink.common.msg_command_long
+import com.MAVLink.enums.MAV_CMD
+import com.MAVLink.Messages.MAVLinkPacket
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -67,27 +71,33 @@ object MavlinkCommands {
         val msg = msg_command_long()
         msg.target_system = 1
         msg.target_component = 1
-        msg.command = MAV_CMD.MAV_CMD_COMPONENT_ARM_DISARM.toFloat()
+        msg.command = MAV_CMD.MAV_CMD_COMPONENT_ARM_DISARM
         msg.confirmation = 0
         msg.param1 = if (arm) 1f else 0f
         msg.param2 = 21196f // magic value required by ArduPilot
-        return msg.encode()
+        val packet: MAVLinkPacket = msg.pack()
+        return packet.encodePacket()
     }
 
     fun takeoffCommand(altitude: Float): ByteArray {
         val msg = msg_command_long()
         msg.target_system = 1
         msg.target_component = 1
-        msg.command = MAV_CMD.MAV_CMD_NAV_TAKEOFF.toFloat()
+        msg.command = MAV_CMD.MAV_CMD_NAV_TAKEOFF
+        msg.param5 = 0f // Latitude
+        msg.param6 = 0f // Longitude
         msg.param7 = altitude
-        return msg.encode()
+        val packet: MAVLinkPacket = msg.pack()
+        return packet.encodePacket()
     }
 
     fun landCommand(): ByteArray {
         val msg = msg_command_long()
         msg.target_system = 1
         msg.target_component = 1
-        msg.command = MAV_CMD.MAV_CMD_NAV_LAND.toFloat()
-        return msg.encode()
+        msg.command = MAV_CMD.MAV_CMD_NAV_LAND
+        val packet: MAVLinkPacket = msg.pack()
+        return packet.encodePacket()
     }
 }
+

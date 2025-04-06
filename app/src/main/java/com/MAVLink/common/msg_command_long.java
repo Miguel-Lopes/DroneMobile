@@ -5,7 +5,7 @@
  */
 
 // MESSAGE COMMAND_LONG PACKING
-package com.mavlink.generatedMavlinkFunctions.common;
+package com.MAVLink.common;
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
@@ -236,4 +236,5 @@ public class msg_command_long extends MAVLinkMessage {
         return "MAVLINK_MSG_ID_COMMAND_LONG";
     }
 }
-        
+
+

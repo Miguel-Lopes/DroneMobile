@@ -5,7 +5,7 @@
  */
 
 // MESSAGE ATTITUDE_QUATERNION_COV PACKING
-package com.MAVLink.common;
+package com.MAVLink.generatedMavlinkFunctions.common;
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
@@ -197,4 +197,3 @@ public class msg_attitude_quaternion_cov extends MAVLinkMessage {
         return "MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV";
     }
 }
-        
