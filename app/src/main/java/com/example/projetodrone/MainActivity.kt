@@ -12,7 +12,7 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 import com.mavlink.generatedMavlinkFunctions.common.msg_command_long
-import com.mavlink.definitions.MAV_CMD
+import com.mavlink.generatedMavlinkFunctions.enums.MAV_CMD
 
 class MainActivity : AppCompatActivity() {
 
