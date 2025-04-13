@@ -19,6 +19,7 @@ import com.MAVLink.enums.MAV_CMD
 import com.MAVLink.enums.MAV_FRAME
 import com.MAVLink.enums.MAVLINK_MSG_SET_POS_TARGET_MASK //Criei eu
 import com.MAVLink.MAVLinkPacket
+import io.github.controlwear.virtual.joystick.android.JoystickView
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,28 +36,37 @@ class MainActivity : AppCompatActivity() {
         address = InetAddress.getByName(droneIP)
 
         //Front end stuff
-        val armBtn: Button = findViewById(R.id.armButton)
-        val takeoffBtn: Button = findViewById(R.id.takeoffButton)
-        val landBtn: Button = findViewById(R.id.landButton)
-        val leftJoystick: Button = findViewById(R.id.leftJoystick)
-        val rightJoystick: Button = findViewById(R.id.rightJoystick)
+        val btnArm: Button = findViewById(R.id.btnArm)
+        val btnTakeOff: Button = findViewById(R.id.btnTakeOff)
+        val btnLand: Button = findViewById(R.id.btnLand)
+        val joystickLeft: JoystickView = findViewById(R.id.joystickLeft)
+        val joystickRight: JoystickView = findViewById(R.id.joystickRight)
 
-        armBtn.setOnClickListener {
+        btnArm.setOnClickListener {
             sendMavlinkCommand(MavlinkCommands.armCommand(true))
         }
 
-        takeoffBtn.setOnClickListener {
+        btnTakeOff.setOnClickListener {
             sendMavlinkCommand(MavlinkCommands.takeoffCommand(10f))
         }
 
-        landBtn.setOnClickListener {
+        btnLand.setOnClickListener {
             sendMavlinkCommand(MavlinkCommands.landCommand())
         }
-        leftJoystick.setOnClickListener {
+       /*leftJoystick.setOnClickListener {
             sendMavlinkCommand(MavlinkJoystick.leftStickToVelocityPacket()) //TODO add front end values
+        }*/
+        joystickLeft.setOnMoveListener { angle, strength ->
+            // Do whatever you want with angle and strength
+            Log.d("Joystick", "Angle: $angle, Strength: $strength")
         }
-        rightJoystick.setOnClickListener {
+        /*rightJoystick.setOnClickListener {
             sendMavlinkCommand(MavlinkJoystick.rightStickToVelocityPacket()) //TODO add front end values
+        }*/
+
+        joystickRight.setOnMoveListener { angle, strength ->
+            // Do whatever you want with angle and strength
+            Log.d("Joystick", "Angle: $angle, Strength: $strength")
         }
     }
 
