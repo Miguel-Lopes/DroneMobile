@@ -20,20 +20,37 @@ import com.MAVLink.enums.MAV_FRAME
 import com.MAVLink.enums.MAVLINK_MSG_SET_POS_TARGET_MASK //Criei eu
 import com.MAVLink.MAVLinkPacket
 import io.github.controlwear.virtual.joystick.android.JoystickView
+import java.io.OutputStream
+import java.net.Socket
 
 class MainActivity : AppCompatActivity() {
 
-    private val droneIP = "192.168.4.1" // Replace with SITL IP or real drone later
-    private val dronePort = 14550 // MAVLink port
-    private lateinit var socket: DatagramSocket
+    private val droneIP = "10.0.2.2" // Replace with SITL IP or real drone later
+    private val dronePort = 5763 // MAVLink port
+    private lateinit var socket: Socket
     private lateinit var address: InetAddress
+    private lateinit var outputStream: OutputStream
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main) // TODO: Create the activity_main.xml layout with buttons
 
-        socket = DatagramSocket()
-        address = InetAddress.getByName(droneIP)
+        // Initialize TCP connection in a coroutine
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                address = InetAddress.getByName(droneIP)
+                socket = Socket(address, dronePort)
+                outputStream = socket.getOutputStream()
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "Connected to drone", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "Connection failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+                e.printStackTrace()
+            }
+        }
 
         //Front end stuff
         val btnArm: Button = findViewById(R.id.btnArm)
@@ -70,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendMavlinkCommand(data: ByteArray) {
+    /*private fun sendMavlinkCommand(data: ByteArray) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val packet = DatagramPacket(data, data.size, address, dronePort)
@@ -82,6 +99,42 @@ class MainActivity : AppCompatActivity() {
                 }
                 e.printStackTrace()
             }
+        }
+    }*/
+
+    private fun sendMavlinkCommand(data: ByteArray) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                if (::outputStream.isInitialized) {
+                    outputStream.write(data)
+                    outputStream.flush()
+                    Log.d("MAVLINK", "Command sent via TCP")
+                } else {
+                    Log.e("MavLink ERROR","Not connected to drone")
+                }
+            } catch (e: Exception) {
+                Log.e("MavLink ERROR","Failed to send command")
+                e.printStackTrace()
+
+                // Attempt to reconnect
+                try {
+                    socket = Socket(address, dronePort)
+                    outputStream = socket.getOutputStream()
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            if (::socket.isInitialized) {
+                socket.close()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

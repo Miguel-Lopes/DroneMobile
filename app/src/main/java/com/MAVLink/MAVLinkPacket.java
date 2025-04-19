@@ -11,14 +11,22 @@ import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.ardupilotmega.CRC;
 
-import com.MAVLink.ardupilotmega.*;
-import com.MAVLink.common.*;
-import com.MAVLink.uAvionix.*;
-import com.MAVLink.icarous.*;
-import com.MAVLink.loweheiser.*;
-import com.MAVLink.cubepilot.*;
-import com.MAVLink.csAirLink.*;
-import com.MAVLink.standard.*;
+import com.MAVLink.ardupilotmega.*;
+
+import com.MAVLink.common.*;
+
+import com.MAVLink.uAvionix.*;
+
+import com.MAVLink.icarous.*;
+
+import com.MAVLink.loweheiser.*;
+
+import com.MAVLink.cubepilot.*;
+
+import com.MAVLink.csAirLink.*;
+
+import com.MAVLink.standard.*;
+
 import com.MAVLink.minimal.*;
 
 /**
@@ -352,8 +360,8 @@ public class MAVLinkPacket implements Serializable {
                 return  new msg_safety_set_allowed_area(this);
                         case msg_safety_allowed_area.MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA:
                 return  new msg_safety_allowed_area(this);
-                        case msg_attitude_quaternion_cov.MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV:
-                return  new msg_attitude_quaternion_cov(this);
+                /*        case msg_attitude_quaternion_cov.MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV:
+                return  new msg_attitude_quaternion_cov(this);*/
                         case msg_nav_controller_output.MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
                 return  new msg_nav_controller_output(this);
                         case msg_global_position_int_cov.MAVLINK_MSG_ID_GLOBAL_POSITION_INT_COV:
